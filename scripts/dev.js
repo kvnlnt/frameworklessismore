@@ -18,9 +18,9 @@ CONTENT_TYPE.CSS = "text/css";
  */
 const Dev = function (port) {
     this.port = port || 7001;
-    this.templates = pkg.cart.templates;
-    this.js = pkg.cart.dev.js;
-    this.css = pkg.cart.css;
+    this.templates = pkg.app.dev.templates;
+    this.js = this.flatten(pkg.app.dev.js.map(this.getSourceFiles));
+    this.css = this.flatten(pkg.app.dev.css.map(this.getSourceFiles));
     this.server = null;
     this.start();
 };
@@ -41,7 +41,7 @@ Dev.prototype = {
             console.log("");
             console.log("");
             console.log(chalk.bgWhite("        "));
-            console.log(chalk.black.bgWhite("  CART  "), " DEV ");
+            console.log(chalk.black.bgWhite("  app  "), " DEV ");
             console.log(chalk.bgWhite("        "));
             console.log("");
             console.log("");
@@ -56,6 +56,22 @@ Dev.prototype = {
             console.log("");
 
         });
+    },
+
+    /**
+     * flatten array of arrays
+     */
+    flatten: function(arrayOfArrays){
+        return [].concat.apply([], arrayOfArrays);
+    },
+
+    /**
+     * Gets the file set from src in package.json
+     *
+     * @param      {<type>}  sourceSet  The source set
+     */
+    getSourceFiles: function(set){
+        return pkg.app.src[set];
     },
 
     /**
